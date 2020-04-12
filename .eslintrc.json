@@ -1,0 +1,16 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "prettier", "prettier/react"],
+  "plugins": ["prettier", "simple-import-sort", "react-hooks"],
+  "rules": {
+    "simple-import-sort/sort": "error",
+    "prettier/prettier": ["error"],
+    "react-hooks/rules-of-hooks": "error",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "no-shadow": "off",
+    "sort-imports": "off",
+    "import/order": "off"
+  }
+}
