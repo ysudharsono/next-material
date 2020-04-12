@@ -11,6 +11,7 @@
     "react/prop-types": "off",
     "no-shadow": "off",
     "sort-imports": "off",
-    "import/order": "off"
+    "import/order": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }

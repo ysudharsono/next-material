@@ -4,7 +4,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const { redirectToHTTPS } = require('express-http-to-https');
 
-const port = parseInt(process.env.PORT, 10) || 3000;
+const port = parseInt(process.env.PORT, 10) || 5000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
