@@ -10,7 +10,6 @@ const Signin = ({ authenticate }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log('login with ', { email, password });
     const user = { email, password };
     authenticate(user);
   };
