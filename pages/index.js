@@ -1,24 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getPosts } from '../lib/redux/actions/fooAction';
+import Layout from '../components/Layout';
+import { getPosts } from '../lib/redux/actions/fooA';
 
-const Index = (props) => {
-  const { foo, custom } = props;
-
+const Index = ({ foo, custom, getPosts }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.getPosts();
+    getPosts();
   };
 
   return (
-    <div>
-      <div>Prop from Redux {JSON.stringify(foo)}</div>
-      <button type="button" onClick={handleSubmit}>
-        Load
-      </button>
-      <div>Prop from getInitialProps {custom}</div>
-    </div>
+    <Layout>
+      <div>
+        <div>Prop from Redux {JSON.stringify(foo)}</div>
+        <button type="button" onClick={handleSubmit}>
+          Load
+        </button>
+        <div>Prop from getInitialProps {custom}</div>
+      </div>
+    </Layout>
   );
 };
 

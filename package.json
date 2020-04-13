@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-http-to-https": "^1.1.4",
     "helmet": "^3.22.0",
+    "js-cookie": "^2.2.1",
     "next": "^9.3.4",
     "next-redux-wrapper": "^5.0.0",
     "react": "^16.13.1",
