@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import Head from 'next/head';
 import Link from 'next/link';
 import { connect } from 'react-redux';
@@ -34,7 +32,6 @@ const Layout = ({ children, title, deauthenticate, isAuthenticated }) => (
         )}
 
         {isAuthenticated && (
-          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
           <li onClick={deauthenticate}>
             <a>Sign Out</a>
           </li>

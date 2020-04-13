@@ -24,6 +24,6 @@ app.prepare().then(() => {
   server.listen(port, (err) => {
     if (err) throw err;
     // eslint-disable-next-line no-console
-    console.log(`> ${process.env.NODE_ENV} Ready on Port:${port}`);
+    console.log(`> ${process.env.NODE_ENV || 'Dev'} Ready on Port:${port}`);
   });
 });
