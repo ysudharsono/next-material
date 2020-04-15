@@ -2,14 +2,18 @@ import withRedux from 'next-redux-wrapper';
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import LoadingBar from '../components/Loading';
 import makeStore from '../lib/redux';
 import { checkServerSideCookie } from '../lib/redux/actions/authA';
 
 const MyApp = ({ Component, pageProps, store }) => {
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <>
+      <LoadingBar />
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </>
   );
 };
 
