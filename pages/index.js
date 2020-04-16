@@ -1,31 +1,63 @@
+import { Button } from 'antd';
+import Link from 'next/link';
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
 
-import Layout from '../components/Layout';
-import { getPosts } from '../lib/redux/actions/fooA';
+import withAuth, { PUBLIC } from '../components/withAuth';
+import { signout } from '../lib/redux/actions/authA';
 
-const Index = ({ foo, custom, getPosts }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    getPosts();
+const Home = (props) => {
+  const { signout, user } = props;
+  const name = user ? `${user.email}` : 'Anonymous';
+
+  const handleSignout = () => {
+    signout();
   };
 
   return (
-    <Layout>
+    <div>
+      <h1>Hello {name}!</h1>
       <div>
-        <div>Prop from Redux {JSON.stringify(foo)}</div>
-        <button type="button" onClick={handleSubmit}>
-          Load
-        </button>
-        <div>Prop from getInitialProps {custom}</div>
+        <Link href="/private">
+          <Button type="link">Link to a private page</Button>
+        </Link>
       </div>
-    </Layout>
+      <div>
+        <Link href="/private-perm-required">
+          <Button type="link">Link to a private page with specific permission requirement</Button>
+        </Link>
+      </div>
+      {user === null ? (
+        <div>
+          <div>
+            <Link href="/signin">
+              <Button type="link">Sign In</Button>
+            </Link>
+          </div>
+          <div>
+            <Link href="/register">
+              <Button type="link">Register</Button>
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <Button type="link" onClick={handleSignout}>
+          Sign Out
+        </Button>
+      )}
+    </div>
   );
 };
 
-Index.getInitialProps = async ({ store, isServer, pathname, query }) => {
-  // await store.dispatch(getPosts());
-  return { custom: 'custom' };
+const mapStateToProps = (state) => {
+  return {
+    user: state.auth.user,
+  };
 };
 
-export default connect((state) => state, { getPosts })(Index);
+const mapDispatchToProps = (dispatch) => {
+  return { signout: bindActionCreators(signout, dispatch) };
+};
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), withAuth(PUBLIC))(Home);

@@ -1,23 +1,25 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { signin } from '../lib/redux/actions/authA';
+import { register } from '../lib/redux/actions/authA';
 
-const Signin = (props) => {
-  const [username] = useState('senz17@gmail.com');
-  const [password] = useState('ZXasqw12');
-
-  const { signin } = props;
+const Register = (props) => {
+  const { register } = props;
 
   const onFinish = (values) => {
-    signin(values);
+    register(values);
   };
 
   return (
-    <Form name="signin" initialValues={{ username, password }} onFinish={onFinish}>
+    <Form
+      name="normal_login"
+      className="login-form"
+      initialValues={{ username: '', password: '' }}
+      onFinish={onFinish}
+    >
       <Form.Item
         name="username"
         rules={[{ required: true, message: 'Please input your Username!' }]}
@@ -37,13 +39,13 @@ const Signin = (props) => {
 
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
+          Register
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({ signin: bindActionCreators(signin, dispatch) });
+const mapDispatchToProps = (dispatch) => ({ register: bindActionCreators(register, dispatch) });
 
-export default connect(null, mapDispatchToProps)(Signin);
+export default connect(null, mapDispatchToProps)(Register);

@@ -1,10 +1,11 @@
+import 'antd/dist/antd.css';
+
 import withRedux from 'next-redux-wrapper';
 import React from 'react';
 import { Provider } from 'react-redux';
 
 import LoadingBar from '../components/Loading';
 import makeStore from '../lib/redux';
-import { checkServerSideCookie } from '../lib/redux/actions/authA';
 
 const MyApp = ({ Component, pageProps, store }) => {
   return (
@@ -18,10 +19,6 @@ const MyApp = ({ Component, pageProps, store }) => {
 };
 
 MyApp.getInitialProps = async ({ Component, ctx }) => {
-  // we can dispatch from here too
-  // ctx.store.dispatch({ type: 'FOO', payload: 'foo from _app' });
-  checkServerSideCookie(ctx);
-
   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
   return { pageProps };
 };
