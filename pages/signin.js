@@ -1,8 +1,9 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
+import { withRouter } from 'next/router';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 
 import { signin } from '../lib/redux/actions/authA';
 
@@ -10,10 +11,11 @@ const Signin = (props) => {
   const [username] = useState('senz17@gmail.com');
   const [password] = useState('ZXasqw12');
 
-  const { signin } = props;
+  const { signin, router } = props;
 
   const onFinish = (values) => {
-    signin(values);
+    const redirectUri = router.query && router.query.next;
+    signin(values, redirectUri);
   };
 
   return (
@@ -46,4 +48,4 @@ const Signin = (props) => {
 
 const mapDispatchToProps = (dispatch) => ({ signin: bindActionCreators(signin, dispatch) });
 
-export default connect(null, mapDispatchToProps)(Signin);
+export default compose(connect(null, mapDispatchToProps), withRouter)(Signin);
