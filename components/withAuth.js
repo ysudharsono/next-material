@@ -66,7 +66,7 @@ export default (permission = null) => (ChildComponent) => {
     let userHasPerm = true;
     // go here only if we have specific permission requirements
     if (permission) {
-      userHasPerm = user.role && user.role.includes(permission.toLowerCase());
+      userHasPerm = user && user.role && user.role.includes(permission.toLowerCase());
     }
     return userHasPerm;
   };
