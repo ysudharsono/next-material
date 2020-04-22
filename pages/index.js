@@ -1,9 +1,10 @@
-import { Button } from 'antd';
+import { Button, Link as MuiLink } from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 
+import Snackbar from '../components/Snackbar';
 import withAuth, { PUBLIC } from '../components/withAuth';
 import { signout } from '../lib/redux/actions/authA';
 
@@ -20,29 +21,31 @@ const Home = (props) => {
       <h1>Hello {name}!</h1>
       <div>
         <Link href="/private">
-          <Button type="link">Link to a private page</Button>
+          <MuiLink>Link to a private page</MuiLink>
         </Link>
       </div>
       <div>
         <Link href="/private-perm-required">
-          <Button type="link">Link to a private page with specific permission requirement</Button>
+          <Button appearance="link">
+            Link to a private page with specific permission requirement
+          </Button>
         </Link>
       </div>
       {user === null ? (
         <div>
           <div>
             <Link href="/signin">
-              <Button type="link">Sign In</Button>
+              <Button appearance="link">Sign In</Button>
             </Link>
           </div>
           <div>
             <Link href="/register">
-              <Button type="link">Register</Button>
+              <Button appearance="link">Register</Button>
             </Link>
           </div>
         </div>
       ) : (
-        <Button type="link" onClick={handleSignout}>
+        <Button appearance="link" onClick={handleSignout}>
           Sign Out
         </Button>
       )}
@@ -56,8 +59,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return { signout: bindActionCreators(signout, dispatch) };
-};
+const mapDispatchToProps = { signout };
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), withAuth(PUBLIC))(Home);

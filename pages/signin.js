@@ -1,51 +1,134 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
-import { withRouter } from 'next/router';
-import React, { useState } from 'react';
+import { Avatar, Box, Button, Grid, Link, Paper, TextField, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Face } from '@material-ui/icons';
+import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, compose } from 'redux';
 
 import { signin } from '../lib/redux/actions/authA';
 
-const Signin = (props) => {
-  const [username] = useState('senz17@gmail.com');
-  const [password] = useState('ZXasqw12');
-
-  const { signin, router } = props;
-
-  const onFinish = (values) => {
-    const redirectUri = router.query && router.query.next;
-    signin(values, redirectUri);
-  };
-
+const Copyright = () => {
   return (
-    <Form name="signin" initialValues={{ username, password }} onFinish={onFinish}>
-      <Form.Item
-        name="username"
-        rules={[{ required: true, message: 'Please input your Username!' }]}
-      >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: 'Please input your Password!' }]}
-      >
-        <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
-          type="password"
-          placeholder="Password"
-        />
-      </Form.Item>
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
-        </Button>
-      </Form.Item>
-    </Form>
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      Your Website {new Date().getFullYear()}
+    </Typography>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({ signin: bindActionCreators(signin, dispatch) });
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: '100vh',
+    [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(5),
+    },
+  },
+  image: {
+    backgroundImage:
+      'url(https://images.unsplash.com/photo-1543269664-7eef42226a21?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)', // 'url(https://source.unsplash.com/random)',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    height: theme.spacing(8),
+    width: theme.spacing(8),
+    backgroundColor: theme.palette.primary.dark,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(2, 0, 2),
+  },
+  heading: {
+    marginBottom: theme.spacing(2),
+  },
+}));
 
-export default compose(connect(null, mapDispatchToProps), withRouter)(Signin);
+const Signin = (props) => {
+  const classes = useStyles();
+  const { signin } = props;
+
+  const handleSignin = () => {
+    signin({ username: 'sd', password: 'df' });
+  };
+
+  return (
+    <Grid container component="main" className={classes.root}>
+      <Grid item xs={false} sm={false} md={7} className={classes.image} />
+      <Grid item xs={12} sm={12} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <Face fontSize="large" />
+          </Avatar>
+          <Typography component="h1" variant="h4" className={classes.heading}>
+            sign in
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handleSignin}
+            >
+              sign in
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Don&apos;t have an account? Sign Up
+                </Link>
+              </Grid>
+            </Grid>
+            <Box mt={8}>
+              <Copyright />
+            </Box>
+          </form>
+        </div>
+      </Grid>
+    </Grid>
+  );
+};
+
+const mapDispatchToProps = { signin };
+
+export default connect(null, mapDispatchToProps)(Signin);
