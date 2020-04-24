@@ -1,19 +1,19 @@
 import { Button, Link as MuiLink } from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import Snackbar from '../components/Snackbar';
 import withAuth, { PUBLIC } from '../components/withAuth';
 import { signout } from '../lib/redux/actions/authA';
 
-const Home = (props) => {
-  const { signout, user } = props;
+const Home = () => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+
   const name = user ? `${user.email}` : 'Anonymous';
 
   const handleSignout = () => {
-    signout();
+    dispatch(signout());
   };
 
   return (
@@ -53,12 +53,4 @@ const Home = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.auth.user,
-  };
-};
-
-const mapDispatchToProps = { signout };
-
-export default compose(connect(mapStateToProps, mapDispatchToProps), withAuth(PUBLIC))(Home);
+export default withAuth(PUBLIC)(Home);

@@ -25,14 +25,16 @@ const MyApp = ({ Component, pageProps, store }) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <LoadingBar />
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
+
+      <ThemeProvider theme={theme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        <Provider store={store}>
           <Snackbar />
           <Component {...pageProps} />
-        </ThemeProvider>
-      </Provider>
+        </Provider>
+      </ThemeProvider>
+
       {/* <style jsx global>{`
         html,
         body {

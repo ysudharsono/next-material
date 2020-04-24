@@ -1,9 +1,25 @@
-import { Avatar, Box, Button, Grid, Link, Paper, TextField, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  Link,
+  Paper,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Face } from '@material-ui/icons';
+import { FastField, Formik } from 'formik';
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
 
+import PasswordInput from '../components/PasswordInput';
 import { signin } from '../lib/redux/actions/authA';
 
 const Copyright = () => {
@@ -36,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    [theme.breakpoints.only('sm')]: {
+      margin: '15vh 15vw',
+    },
+    [theme.breakpoints.up('md')]: {
+      margin: '15vh 7vw',
+    },
   },
   avatar: {
     margin: theme.spacing(1),
@@ -53,15 +75,27 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     marginBottom: theme.spacing(2),
   },
+  wrapper: {
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: theme.palette.primary.light,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
-const Signin = (props) => {
-  const classes = useStyles();
-  const { signin } = props;
+const validationSchema = Yup.object().shape({
+  username: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
+});
 
-  const handleSignin = () => {
-    signin({ username: 'sd', password: 'df' });
-  };
+const Signin = () => {
+  const dispatch = useDispatch();
+  const classes = useStyles();
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -74,61 +108,103 @@ const Signin = (props) => {
           <Typography component="h1" variant="h4" className={classes.heading}>
             sign in
           </Typography>
-          <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleSignin}
-            >
-              sign in
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Don&apos;t have an account? Sign Up
-                </Link>
-              </Grid>
+          <Formik
+            initialValues={{ username: 'asdkf@lsdjfk.com', password: 'asdf' }}
+            validationSchema={validationSchema}
+            onSubmit={({ username, password }, { setSubmitting }) => {
+              dispatch(signin({ username, password })).catch(() =>
+                setTimeout(() => {
+                  setSubmitting(false);
+                }, 400)
+              );
+            }}
+          >
+            {({
+              handleSubmit,
+              isSubmitting,
+              /* and other goodies */
+            }) => (
+              <form className={classes.form} noValidate autoComplete="off">
+                <FastField name="username">
+                  {({
+                    field, // { name, value, onChange, onBlur }
+                    meta,
+                  }) => (
+                    <TextField
+                      {...field}
+                      error={meta.error && meta.touched}
+                      helperText={meta.error && meta.touched && meta.error}
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      label="Email Address"
+                      type="email"
+                      autoComplete="email"
+                      autoFocus
+                    />
+                  )}
+                </FastField>
+                <FastField name="password">
+                  {({
+                    field, // { name, value, onChange, onBlur }
+                    meta,
+                  }) => (
+                    <FormControl variant="outlined" fullWidth margin="normal">
+                      <InputLabel htmlFor="password">Password</InputLabel>
+                      <PasswordInput
+                        id="password"
+                        {...field}
+                        error={meta.error && meta.touched}
+                        fullWidth
+                        label="Password"
+                        autoComplete="current-password"
+                      />
+                      {meta.error && meta.touched && (
+                        <FormHelperText error>{meta.error}</FormHelperText>
+                      )}
+                    </FormControl>
+                  )}
+                </FastField>
+
+                <div className={classes.wrapper}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    sign in
+                  </Button>
+                  {isSubmitting && (
+                    <CircularProgress size={24} className={classes.buttonProgress} />
+                  )}
+                </div>
+              </form>
+            )}
+          </Formik>
+
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
             </Grid>
-            <Box mt={8}>
-              <Copyright />
-            </Box>
-          </form>
+            <Grid item>
+              <Link href="#" variant="body2">
+                Don&apos;t have an account? Sign Up
+              </Link>
+            </Grid>
+          </Grid>
+          <Box mt={8}>
+            <Copyright />
+          </Box>
         </div>
       </Grid>
     </Grid>
   );
 };
 
-const mapDispatchToProps = { signin };
-
-export default connect(null, mapDispatchToProps)(Signin);
+export default Signin;

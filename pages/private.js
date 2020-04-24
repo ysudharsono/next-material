@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import React from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useSelector } from 'react-redux';
 
 import withAuth from '../components/withAuth';
 
-const Private = (props) => {
-  const { user } = props;
+const Private = () => {
+  const user = useSelector((state) => state.auth.user);
+
   const name = user ? `${user.email}` : 'Anonymous';
 
   return (
@@ -24,10 +24,4 @@ const Private = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.auth.user,
-  };
-};
-
-export default compose(connect(mapStateToProps), withAuth())(Private);
+export default withAuth()(Private);

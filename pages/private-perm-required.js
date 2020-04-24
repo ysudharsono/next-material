@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useSelector } from 'react-redux';
 
 import withAuth from '../components/withAuth';
 
-const PrivatePermRequired = (props) => {
-  const { user } = props;
+const PrivatePermRequired = () => {
+  const user = useSelector((state) => state.auth.user);
   const name = user ? `${user.email}` : 'Anonymous';
 
   return (
@@ -24,10 +23,4 @@ const PrivatePermRequired = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.auth.user,
-  };
-};
-
-export default compose(connect(mapStateToProps, null), withAuth('admin'))(PrivatePermRequired);
+export default withAuth('admin')(PrivatePermRequired);

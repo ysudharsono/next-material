@@ -2,20 +2,18 @@ import { Snackbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 import React, { useEffect, useRef, useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import snackbar from '../lib/redux/actions/snackbarA';
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   alertRoot: { borderRadius: 10 },
 }));
 
-const ConsecutiveSnackbars = (props) => {
+const ConsecutiveSnackbars = () => {
   const classes = useStyles();
+  const queue = useSelector((state) => state.snackbar);
+
   const queueRef = useRef([]);
   const [open, setOpen] = React.useState(false);
-
-  const { queue } = props;
 
   const [messageInfo, setMessageInfo] = useState({ severity: '', message: '' });
 
@@ -64,7 +62,7 @@ const ConsecutiveSnackbars = (props) => {
         horizontal: 'left',
       }}
       open={open}
-      // autoHideDuration={6000}
+      autoHideDuration={6000}
       onClose={handleClose}
       onExited={handleExited}
       message={messageInfo ? messageInfo.message : undefined}
@@ -81,17 +79,14 @@ const ConsecutiveSnackbars = (props) => {
   );
 };
 
-ConsecutiveSnackbars.getInitialProps = async (context) => {
-  const { isServer, store } = context;
+// ConsecutiveSnackbars.getInitialProps = async (context) => {
+//   const { isServer, store } = context;
 
-  if (isServer) {
-    await store.dispatch(snackbar.success('yo'));
-  }
-  return {};
-};
+//   if (isServer) {
+//     const serverQueue = store.state.snackbar;
+//     // await store.dispatch(snackbar.success('yo'));
+//   }
+//   return { serverQueue };
+// };
 
-const mapStateToProps = (state) => {
-  return { queue: state.snackbar };
-};
-
-export default connect(mapStateToProps, null)(ConsecutiveSnackbars);
+export default ConsecutiveSnackbars;
