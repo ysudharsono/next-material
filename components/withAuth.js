@@ -56,9 +56,9 @@ export default (permission = null) => (ChildComponent) => {
     const { isServer, req, res } = context;
 
     if (isServer) {
-      res.redirect(`/unauthorized?next=${req.originalUrl}`);
+      res.redirect(`/unauthorized`);
     } else {
-      Router.push(`/unauthorized?next=${context.asPath}`);
+      Router.push(`/unauthorized`);
     }
   };
 

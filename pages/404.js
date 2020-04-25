@@ -22,11 +22,7 @@ const NotFound = () => {
     <>
       <div className={classes.root}>
         <Typography variant="h4" align="center" classes={{ h4: classes.fontFamily }}>
-          <Typical
-            steps={['You are not authorized to view this page.', 3000, '', 1000]}
-            loop={Infinity}
-            wrapper="p"
-          />
+          <Typical steps={['404, page not found.', 3000, '', 1000]} loop={Infinity} wrapper="p" />
         </Typography>
       </div>
     </>
