@@ -4,8 +4,8 @@ import { Alert } from '@material-ui/lab';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const useStyles = makeStyles(() => ({
-  alertRoot: { borderRadius: 10 },
+const useStyles = makeStyles((theme) => ({
+  alertRoot: { borderRadius: theme.spacing(0) },
 }));
 
 const ConsecutiveSnackbars = () => {
@@ -58,8 +58,8 @@ const ConsecutiveSnackbars = () => {
     <Snackbar
       key={messageInfo ? messageInfo.key : undefined}
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
+        vertical: 'top',
+        horizontal: 'center',
       }}
       open={open}
       autoHideDuration={6000}
