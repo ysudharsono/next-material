@@ -1,3 +1,5 @@
+import { faLightbulb, faListAlt, faTrashAlt, faUser } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   AppBar,
   Avatar,
@@ -91,6 +93,9 @@ const useStyles = makeStyles((theme) => {
     },
     lightColor: {
       color: theme.palette.getContrastText(theme.palette.primary.dark),
+    },
+    svg: {
+      fontSize: theme.typography.fontSize * 1.25,
     },
 
     // Logo
@@ -266,7 +271,10 @@ const Layout = (props) => {
                   className={classes.lightColor}
                   classes={{ root: open ? classes.listItemIconOpen : classes.listItemIconClose }}
                 >
-                  {index % 2 === 0 ? <Inbox /> : <Mail />}
+                  <FontAwesomeIcon
+                    icon={index % 2 === 0 ? faTrashAlt : faUser}
+                    className={classes.svg}
+                  />
                 </ListItemIcon>
                 {open && <ListItemText className={clsx(classes.lightColor)} primary={text} />}
               </ListItem>
@@ -294,7 +302,10 @@ const Layout = (props) => {
                   className={classes.lightColor}
                   classes={{ root: open ? classes.listItemIconOpen : classes.listItemIconClose }}
                 >
-                  {index % 2 === 0 ? <Inbox /> : <Mail />}
+                  <FontAwesomeIcon
+                    icon={index % 2 === 0 ? faListAlt : faLightbulb}
+                    className={classes.svg}
+                  />
                 </ListItemIcon>
                 {open && <ListItemText className={classes.lightColor} primary={text} />}
               </ListItem>

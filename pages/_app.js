@@ -1,3 +1,6 @@
+import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
+
+import { config } from '@fortawesome/fontawesome-svg-core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import withRedux from 'next-redux-wrapper';
@@ -9,6 +12,8 @@ import LoadingBar from '../components/Loading';
 import Snackbar from '../components/Snackbar';
 import makeStore from '../lib/redux';
 import theme from '../lib/theme';
+
+config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
 
 const MyApp = ({ Component, pageProps, store }) => {
   useEffect(() => {
