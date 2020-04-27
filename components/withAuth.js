@@ -47,6 +47,8 @@ export default (permission = null) => (ChildComponent) => {
 
     if (isServer) {
       res.redirect(`/signin?next=${req.originalUrl}`);
+      res.finished = true;
+      res.end();
     } else {
       Router.push(`/signin?next=${context.asPath}`);
     }
@@ -57,6 +59,8 @@ export default (permission = null) => (ChildComponent) => {
 
     if (isServer) {
       res.redirect(`/unauthorized`);
+      res.finished = true;
+      res.end();
     } else {
       Router.push(`/unauthorized`);
     }

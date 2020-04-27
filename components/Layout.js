@@ -19,153 +19,157 @@ import { ChevronLeft, ChevronRight, FilterNone, Inbox, Mail, Menu } from '@mater
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-const drawerWidth = 240;
+const useStyles = makeStyles((theme) => {
+  const drawerWidthOpen = theme.spacing(25);
+  const drawerWidthClose = theme.spacing(8);
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-
-  // App Bar
-  //   appBar: {
-  //     zIndex: theme.zIndex.drawer + 1,
-  //     transition: theme.transitions.create(['width', 'margin'], {
-  //       easing: theme.transitions.easing.sharp,
-  //       duration: theme.transitions.duration.leavingScreen/2,
-  //     }),
-  //   },
-  //   appBarShift: {
-  //     marginLeft: drawerWidth,
-  //     width: `calc(100% - ${drawerWidth}px)`,
-  //     transition: theme.transitions.create(['width', 'margin'], {
-  //       easing: theme.transitions.easing.sharp,
-  //       duration: theme.transitions.duration.enteringScreen/2,
-  //     }),
-  //   },
-  //   menuButton: {
-  //     marginRight: 36,
-  //   },
-  //   hide: {
-  //     display: 'none',
-  //   },
-
-  // Main
-  toolbar: {
-    // display: 'flex',
-    // alignItems: 'center',
-    // justifyContent: 'flex-end',
-    // padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    // ...theme.mixins.toolbar,
-  },
-  content: {
-    paddingLeft: theme.spacing(3),
-  },
-  paper: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-
-  // List Item
-  listItemOpenGutter: {
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-  },
-  listItemCloseGutter: {
-    paddingLeft: 0,
-    paddingRight: 0,
-    display: 'grid',
-    placeContent: 'center',
-  },
-  listItemTextClose: {
-    display: 'none',
-  },
-  listItemIconOpen: { minWidth: theme.spacing(5) },
-  listItemIconClose: {
-    minWidth: 0,
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(0.5),
-  },
-  lightColor: {
-    color: theme.palette.getContrastText(theme.palette.primary.dark),
-  },
-
-  // Logo
-  logoContainer: {
-    color: theme.palette.secondary.light,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    opacity: 100,
-    marginBottom: theme.spacing(1),
-    transition: theme.transitions.create(['opacity', 'margin-bottom'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen / 2,
-    }),
-  },
-  logoContainerClose: {
-    opacity: 0,
-    marginBottom: 0,
-    transition: theme.transitions.create(['opacity', 'margin-bottom'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen / 2,
-    }),
-  },
-
-  // Drawer
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  },
-  drawerOpen: {
-    background: theme.palette.primary.dark,
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen / 2,
-    }),
-  },
-  drawerClose: {
-    background: theme.palette.primary.dark,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen / 2,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(8),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(8),
+  return {
+    root: {
+      display: 'flex',
     },
-  },
-  drawerButton: {
-    position: 'fixed',
-    zIndex: theme.zIndex.drawer + 2,
-    top: theme.spacing(1),
-    width: theme.spacing(2),
-    height: theme.spacing(2),
-  },
-  drawerButtonOpen: {
-    left: drawerWidth - 20,
-    transition: theme.transitions.create('left', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen / 2,
-    }),
-  },
-  drawerButtonClose: {
-    left: theme.spacing(8) - 20,
-    transition: theme.transitions.create('left', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen / 2,
-    }),
-  },
 
-  // Tooltip
-  tooltip: {
-    marginLeft: -theme.spacing(3),
-  },
-}));
+    // App Bar
+    //   appBar: {
+    //     zIndex: theme.zIndex.drawer + 1,
+    //     transition: theme.transitions.create(['width', 'margin'], {
+    //       easing: theme.transitions.easing.sharp,
+    //       duration: theme.transitions.duration.leavingScreen/2,
+    //     }),
+    //   },
+    //   appBarShift: {
+    //     marginLeft: drawerWidthOpen,
+    //     width: `calc(100% - ${drawerWidthOpen}px)`,
+    //     transition: theme.transitions.create(['width', 'margin'], {
+    //       easing: theme.transitions.easing.sharp,
+    //       duration: theme.transitions.duration.enteringScreen/2,
+    //     }),
+    //   },
+    //   menuButton: {
+    //     marginRight: 36,
+    //   },
+    //   hide: {
+    //     display: 'none',
+    //   },
+
+    // Main
+    content: {
+      width: '100%',
+      paddingLeft: theme.spacing(3),
+    },
+    toolbar: {
+      // display: 'flex',
+      // alignItems: 'center',
+      // justifyContent: 'flex-end',
+      // padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      // ...theme.mixins.toolbar,
+    },
+    paper: {
+      // flexGrow: 1,
+      height: '100vh',
+      padding: theme.spacing(3),
+    },
+    // List Item
+    listItemOpenGutter: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+    },
+    listItemCloseGutter: {
+      paddingLeft: 0,
+      paddingRight: 0,
+      display: 'grid',
+      placeContent: 'center',
+    },
+    listItemTextClose: {
+      display: 'none',
+    },
+    listItemIconOpen: { minWidth: theme.spacing(5) },
+    listItemIconClose: {
+      minWidth: 0,
+      marginTop: theme.spacing(0.5),
+      marginBottom: theme.spacing(0.5),
+    },
+    lightColor: {
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+    },
+
+    // Logo
+    logoContainer: {
+      color: theme.palette.secondary.light,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      opacity: 100,
+      marginBottom: theme.spacing(1),
+      transition: theme.transitions.create('all', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen / 2,
+      }),
+    },
+    logoContainerClose: {
+      opacity: 0,
+      marginBottom: 0,
+      transition: theme.transitions.create('all', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen / 2,
+      }),
+    },
+
+    // Drawer
+    drawer: {
+      width: drawerWidthOpen,
+      flexShrink: 0,
+      whiteSpace: 'nowrap',
+    },
+    drawerOpen: {
+      background: theme.palette.primary.dark,
+      width: drawerWidthOpen,
+      transition: theme.transitions.create('all', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen / 2,
+      }),
+    },
+    drawerClose: {
+      background: theme.palette.primary.dark,
+      transition: theme.transitions.create('all', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen / 2,
+      }),
+      overflowX: 'hidden',
+      width: drawerWidthClose,
+      //   [theme.breakpoints.up('sm')]: {
+      //     width: drawerWidthClose,
+      //   },
+    },
+    drawerButton: {
+      position: 'fixed',
+      zIndex: theme.zIndex.drawer + 2,
+      top: theme.spacing(1),
+      width: theme.spacing(2),
+      height: theme.spacing(2),
+    },
+    drawerButtonOpen: {
+      left: drawerWidthOpen - 20,
+      transition: theme.transitions.create('all', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen / 2,
+      }),
+    },
+    drawerButtonClose: {
+      left: drawerWidthClose - 20,
+      transition: theme.transitions.create('all', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen / 2,
+      }),
+    },
+
+    // Tooltip
+    tooltip: {
+      marginLeft: -theme.spacing(3),
+    },
+  };
+});
 
 const Layout = (props) => {
   const classes = useStyles();
