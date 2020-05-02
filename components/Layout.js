@@ -1,4 +1,5 @@
 import { faLightbulb, faListAlt, faTrashAlt, faUser } from '@fortawesome/free-regular-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   AppBar,
@@ -17,7 +18,6 @@ import {
   Zoom,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { ChevronLeft, ChevronRight, FilterNone, Inbox, Mail, Menu } from '@material-ui/icons';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => {
   return {
     root: {
       display: 'flex',
+      background: theme.palette.customBackground,
     },
 
     // App Bar
@@ -100,25 +101,14 @@ const useStyles = makeStyles((theme) => {
 
     // Logo
     logoContainer: {
-      color: theme.palette.secondary.light,
+      color: theme.palette.getContrastText(theme.palette.drawerColor),
+      marginTop: theme.spacing(1),
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       opacity: 100,
       marginBottom: theme.spacing(1),
-      transition: theme.transitions.create('all', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen / 2,
-      }),
-    },
-    logoContainerClose: {
-      opacity: 0,
-      marginBottom: 0,
-      transition: theme.transitions.create('all', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen / 2,
-      }),
     },
 
     // Drawer
@@ -128,16 +118,16 @@ const useStyles = makeStyles((theme) => {
       whiteSpace: 'nowrap',
     },
     drawerOpen: {
-      background: theme.palette.primary.dark,
+      background: theme.palette.drawerColor,
       width: drawerWidthOpen,
-      transition: theme.transitions.create('all', {
+      transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen / 2,
       }),
     },
     drawerClose: {
-      background: theme.palette.primary.dark,
-      transition: theme.transitions.create('all', {
+      background: theme.palette.drawerColor,
+      transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen / 2,
       }),
@@ -149,23 +139,54 @@ const useStyles = makeStyles((theme) => {
     },
     drawerButton: {
       position: 'fixed',
+      fontSize: theme.typography.fontSize * 1,
       zIndex: theme.zIndex.drawer + 2,
-      top: theme.spacing(1),
-      width: theme.spacing(2),
-      height: theme.spacing(2),
+      top: theme.spacing(6.5),
+      background: theme.palette.getContrastText(theme.palette.primary.main),
+      color: theme.palette.primary.main,
+      width: theme.spacing(3),
+      height: theme.spacing(3),
+      display: 'grid',
+      placeContent: 'center',
+      borderRadius: theme.spacing(5),
+      boxShadow: theme.shadows[1],
+      cursor: 'pointer',
+      '&:focus': {
+        outline: 'none',
+      },
+      '&:hover': {
+        transform: 'scale(1.5)',
+        color: theme.palette.getContrastText(theme.palette.primary.main),
+        background: theme.palette.primary.main,
+      },
     },
     drawerButtonOpen: {
-      left: drawerWidthOpen - 20,
-      transition: theme.transitions.create('all', {
+      left: drawerWidthOpen - 12,
+      transition: theme.transitions.create(['left', 'transform'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen / 2,
       }),
     },
     drawerButtonClose: {
-      left: drawerWidthClose - 20,
-      transition: theme.transitions.create('all', {
+      left: drawerWidthClose - 12,
+      transition: theme.transitions.create(['left', 'transform'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen / 2,
+      }),
+    },
+    arrowLeft: {
+      marginLeft: -2,
+      transition: theme.transitions.create(['left', 'transform'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen * 3,
+      }),
+    },
+    arrowRight: {
+      marginLeft: 0,
+      transform: 'rotateY(180deg)',
+      transition: theme.transitions.create(['left', 'transform'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen * 3,
       }),
     },
 
@@ -217,20 +238,18 @@ const Layout = (props) => {
         </Toolbar>
       </AppBar> */}
       <div
+        role="button"
+        tabIndex="-1"
         className={clsx(classes.drawerButton, {
           [classes.drawerButtonOpen]: open,
           [classes.drawerButtonClose]: !open,
         })}
+        onClick={open ? handleDrawerClose : handleDrawerOpen}
       >
-        <Avatar>
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={open ? handleDrawerClose : handleDrawerOpen}
-          >
-            {open ? <ChevronLeft /> : <ChevronRight />}
-          </IconButton>
-        </Avatar>
+        <FontAwesomeIcon
+          icon={faChevronLeft}
+          className={clsx({ [classes.arrowRight]: !open, [classes.arrowLeft]: open })}
+        />
       </div>
       <Drawer
         variant="permanent"
@@ -245,11 +264,16 @@ const Layout = (props) => {
           }),
         }}
       >
-        <div className={clsx(classes.logoContainer, { [classes.logoContainerClose]: !open })}>
-          <img src="static/logo.png" alt="Smiley face" height="60" width="60" />
-          {open && <Typography variant="h6">My App</Typography>}
+        <div className={classes.logoContainer}>
+          <img
+            src="static/logo.png"
+            alt="Logo"
+            height={open ? '70' : '50'}
+            width={open ? '70' : '50'}
+          />
+          {open && <Typography variant="body1">My App</Typography>}
         </div>
-        <Divider />
+        <Divider color="white" />
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <Tooltip

@@ -1,3 +1,5 @@
+import { faUserAstronaut } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
   Box,
@@ -13,14 +15,17 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Face } from '@material-ui/icons';
+import clsx from 'clsx';
 import { FastField, Formik } from 'formik';
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import PasswordInput from '../components/PasswordInput';
 import { signin } from '../lib/redux/actions/authA';
+
+const ParticlesBg = dynamic(import('particles-bg'), { ssr: false });
 
 const Copyright = () => {
   return (
@@ -36,6 +41,11 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     [theme.breakpoints.up('sm')]: {
       padding: theme.spacing(5),
+    },
+  },
+  transparent: {
+    [theme.breakpoints.up('sm')]: {
+      opacity: 0.92,
     },
   },
   image: {
@@ -61,8 +71,8 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    height: theme.spacing(8),
-    width: theme.spacing(8),
+    height: theme.spacing(11),
+    width: theme.spacing(11),
     backgroundColor: theme.palette.primary.dark,
   },
   form: {
@@ -98,112 +108,131 @@ const Signin = () => {
   const classes = useStyles();
 
   return (
-    <Grid container component="main" className={classes.root}>
-      <Grid item xs={false} sm={false} md={7} className={classes.image} />
-      <Grid item xs={12} sm={12} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <Face fontSize="large" />
-          </Avatar>
-          <Typography component="h1" variant="h4" className={classes.heading}>
-            sign in
-          </Typography>
-          <Formik
-            initialValues={{ username: 'asdkf@lsdjfk.com', password: 'asdf' }}
-            validationSchema={validationSchema}
-            onSubmit={({ username, password }, { setSubmitting }) => {
-              dispatch(signin({ username, password })).catch(() =>
-                setTimeout(() => {
-                  setSubmitting(false);
-                }, 400)
-              );
-            }}
-          >
-            {({
-              handleSubmit,
-              isSubmitting,
-              /* and other goodies */
-            }) => (
-              <form className={classes.form} noValidate autoComplete="off">
-                <FastField name="username">
-                  {({
-                    field, // { name, value, onChange, onBlur }
-                    meta,
-                  }) => (
-                    <TextField
-                      {...field}
-                      error={meta.error && meta.touched}
-                      helperText={meta.error && meta.touched && meta.error}
-                      variant="outlined"
-                      margin="normal"
-                      fullWidth
-                      label="Email Address"
-                      type="email"
-                      autoComplete="email"
-                      autoFocus
-                    />
-                  )}
-                </FastField>
-                <FastField name="password">
-                  {({
-                    field, // { name, value, onChange, onBlur }
-                    meta,
-                  }) => (
-                    <FormControl variant="outlined" fullWidth margin="normal">
-                      <InputLabel htmlFor="password">Password</InputLabel>
-                      <PasswordInput
-                        id="password"
+    <>
+      <Grid container component="main" className={classes.root}>
+        <Grid
+          item
+          xs={false}
+          sm={false}
+          md={7}
+          className={clsx(classes.image, classes.transparent)}
+        />
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={5}
+          component={Paper}
+          elevation={6}
+          square
+          className={classes.transparent}
+        >
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <FontAwesomeIcon icon={faUserAstronaut} size="4x" />
+            </Avatar>
+
+            <Typography component="h1" variant="h4" className={classes.heading}>
+              sign in
+            </Typography>
+            <Formik
+              initialValues={{ username: 'asdkf@lsdjfk.com', password: 'asdf' }}
+              validationSchema={validationSchema}
+              onSubmit={({ username, password }, { setSubmitting }) => {
+                dispatch(signin({ username, password })).catch(() =>
+                  setTimeout(() => {
+                    setSubmitting(false);
+                  }, 400)
+                );
+              }}
+            >
+              {({
+                handleSubmit,
+                isSubmitting,
+                /* and other goodies */
+              }) => (
+                <form className={classes.form} noValidate autoComplete="off">
+                  <FastField name="username">
+                    {({
+                      field, // { name, value, onChange, onBlur }
+                      meta,
+                    }) => (
+                      <TextField
                         {...field}
                         error={meta.error && meta.touched}
+                        helperText={meta.error && meta.touched && meta.error}
+                        variant="outlined"
+                        margin="normal"
                         fullWidth
-                        label="Password"
-                        autoComplete="current-password"
+                        label="Email Address"
+                        type="email"
+                        autoComplete="email"
+                        autoFocus
                       />
-                      {meta.error && meta.touched && (
-                        <FormHelperText error>{meta.error}</FormHelperText>
-                      )}
-                    </FormControl>
-                  )}
-                </FastField>
+                    )}
+                  </FastField>
+                  <FastField name="password">
+                    {({
+                      field, // { name, value, onChange, onBlur }
+                      meta,
+                    }) => (
+                      <FormControl variant="outlined" fullWidth margin="normal">
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <PasswordInput
+                          id="password"
+                          {...field}
+                          error={meta.error && meta.touched}
+                          fullWidth
+                          label="Password"
+                          autoComplete="current-password"
+                        />
+                        {meta.error && meta.touched && (
+                          <FormHelperText error>{meta.error}</FormHelperText>
+                        )}
+                      </FormControl>
+                    )}
+                  </FastField>
 
-                <div className={classes.wrapper}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    sign in
-                  </Button>
-                  {isSubmitting && (
-                    <CircularProgress size={24} className={classes.buttonProgress} />
-                  )}
-                </div>
-              </form>
-            )}
-          </Formik>
+                  <div className={classes.wrapper}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                    >
+                      sign in
+                    </Button>
+                    {isSubmitting && (
+                      <CircularProgress size={24} className={classes.buttonProgress} />
+                    )}
+                  </div>
+                </form>
+              )}
+            </Formik>
 
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Don&apos;t have an account? Sign Up
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                Don&apos;t have an account? Sign Up
-              </Link>
-            </Grid>
-          </Grid>
-          <Box mt={8}>
-            <Copyright />
-          </Box>
-        </div>
+            <Box mt={8}>
+              <Copyright />
+            </Box>
+          </div>
+        </Grid>
       </Grid>
-    </Grid>
+      <ParticlesBg type="circle" bg />
+    </>
   );
 };
 

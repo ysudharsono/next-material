@@ -1,8 +1,17 @@
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, InputAdornment, OutlinedInput } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react';
 
+const useStyles = makeStyles((theme) => ({
+  toggleButton: {
+    fontSize: theme.typography.fontSize * 1.25,
+  },
+}));
+
 const PasswordInput = (props) => {
+  const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
@@ -20,8 +29,9 @@ const PasswordInput = (props) => {
             onClick={handleClickShowPassword}
             edge="end"
             tabIndex="-1"
+            className={classes.toggleButton}
           >
-            {showPassword ? <Visibility /> : <VisibilityOff />}
+            <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size="1x" />
           </IconButton>
         </InputAdornment>
       }
