@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme) => {
     content: {
       width: '100%',
       paddingLeft: theme.spacing(3),
+      '@media print': {
+        padding: 0,
+      },
     },
     toolbar: {
       // display: 'flex',
@@ -109,6 +112,9 @@ const useStyles = makeStyles((theme) => {
       alignItems: 'center',
       opacity: 100,
       marginBottom: theme.spacing(1),
+      '@media print': {
+        display: 'none',
+      },
     },
 
     // Drawer
@@ -116,6 +122,9 @@ const useStyles = makeStyles((theme) => {
       width: drawerWidthOpen,
       flexShrink: 0,
       whiteSpace: 'nowrap',
+      '@media print': {
+        display: 'none',
+      },
     },
     drawerOpen: {
       background: theme.palette.drawerColor,
@@ -158,6 +167,9 @@ const useStyles = makeStyles((theme) => {
         transform: 'scale(1.5)',
         color: theme.palette.getContrastText(theme.palette.primary.main),
         background: theme.palette.primary.main,
+      },
+      '@media print': {
+        display: 'none',
       },
     },
     drawerButtonOpen: {
